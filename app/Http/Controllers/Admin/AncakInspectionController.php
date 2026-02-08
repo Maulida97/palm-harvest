@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AncakInspection;
 use App\Models\AncakInspectionRow;
 use App\Models\Division;
+use App\Models\FineCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -55,7 +56,9 @@ class AncakInspectionController extends Controller
             $query->where('status', 'active')->orderBy('code');
         }])->orderBy('name')->get();
 
-        return view('admin.ancak.create', compact('divisions'));
+        $fineCategories = FineCategory::active()->orderBy('code')->get();
+
+        return view('admin.ancak.create', compact('divisions', 'fineCategories'));
     }
 
     /**
@@ -83,7 +86,8 @@ class AncakInspectionController extends Controller
             'rows.*.bunch_count' => 'nullable|integer|min:0',
             'rows.*.bt_pkk' => 'nullable|integer|min:0',
             'rows.*.tph_number' => 'nullable|string|max:255',
-            'rows.*.apd_status' => 'required|in:lengkap,tidak',
+            'rows.*.tph_status' => 'nullable|in:bersih,kotor',
+            'rows.*.apd_status' => 'nullable|in:lengkap,boot,helm',
             'rows.*.fine_amount' => 'nullable|integer|min:0',
         ]);
 
@@ -113,8 +117,29 @@ class AncakInspectionController extends Controller
                 'status' => 'pending',
             ]);
 
-            // Create rows
-            foreach ($validated['rows'] as $index => $rowData) {
+            // Create rows with fine details per role
+            foreach ($request->input('rows', []) as $index => $rowData) {
+                // Parse fine_data JSON if provided
+                $fineData = null;
+                $finePemanen = 0;
+                $fineKerani = 0;
+                $fineMandorPanen = 0;
+                $fineMandor1 = 0;
+                $fineAsisten = 0;
+                
+                if (!empty($rowData['fine_data'])) {
+                    $fineData = json_decode($rowData['fine_data'], true);
+                    if (is_array($fineData)) {
+                        foreach ($fineData as $fine) {
+                            $finePemanen += $fine['pemanen'] ?? 0;
+                            $fineKerani += $fine['kerani'] ?? 0;
+                            $fineMandorPanen += $fine['mandorPanen'] ?? 0;
+                            $fineMandor1 += $fine['mandor1'] ?? 0;
+                            $fineAsisten += $fine['asisten'] ?? 0;
+                        }
+                    }
+                }
+                
                 $inspection->rows()->create([
                     'row_number' => $index + 1,
                     'harvester_name' => $rowData['harvester_name'] ?? null,
@@ -122,8 +147,15 @@ class AncakInspectionController extends Controller
                     'bunch_count' => $rowData['bunch_count'] ?? 0,
                     'bt_pkk' => $rowData['bt_pkk'] ?? 0,
                     'tph_number' => $rowData['tph_number'] ?? null,
-                    'apd_status' => $rowData['apd_status'],
-                    'fine_amount' => $rowData['fine_amount'] ?? 0,
+                    'tph_status' => $rowData['tph_status'] ?? 'bersih',
+                    'apd_status' => $rowData['apd_status'] ?? 'lengkap',
+                    'fine_amount' => $rowData['fine_pemanen'] ?? $rowData['fine_amount'] ?? 0,
+                    'fine_data' => $rowData['fine_data'] ?? null,
+                    'fine_pemanen' => $finePemanen,
+                    'fine_kerani_panen' => $fineKerani,
+                    'fine_mandor_panen' => $fineMandorPanen,
+                    'fine_mandor_1' => $fineMandor1,
+                    'fine_asisten' => $fineAsisten,
                 ]);
             }
 
@@ -157,7 +189,9 @@ class AncakInspectionController extends Controller
             $query->where('status', 'active')->orderBy('code');
         }])->orderBy('name')->get();
 
-        return view('admin.ancak.edit', compact('ancak', 'divisions'));
+        $fineCategories = FineCategory::active()->orderBy('code')->get();
+
+        return view('admin.ancak.edit', compact('ancak', 'divisions', 'fineCategories'));
     }
 
     /**
@@ -186,7 +220,8 @@ class AncakInspectionController extends Controller
             'rows.*.bunch_count' => 'nullable|integer|min:0',
             'rows.*.bt_pkk' => 'nullable|integer|min:0',
             'rows.*.tph_number' => 'nullable|string|max:255',
-            'rows.*.apd_status' => 'required|in:lengkap,tidak',
+            'rows.*.tph_status' => 'nullable|in:bersih,kotor',
+            'rows.*.apd_status' => 'nullable|in:lengkap,boot,helm',
             'rows.*.fine_amount' => 'nullable|integer|min:0',
         ]);
 
@@ -220,9 +255,30 @@ class AncakInspectionController extends Controller
                 'status' => $validated['status'],
             ]);
 
-            // Delete old rows and create new ones
+            // Delete old rows and create new ones with fine details per role
             $ancak->rows()->delete();
-            foreach ($validated['rows'] as $index => $rowData) {
+            foreach ($request->input('rows', []) as $index => $rowData) {
+                // Parse fine_data JSON if provided
+                $fineData = null;
+                $finePemanen = 0;
+                $fineKerani = 0;
+                $fineMandorPanen = 0;
+                $fineMandor1 = 0;
+                $fineAsisten = 0;
+                
+                if (!empty($rowData['fine_data'])) {
+                    $fineData = json_decode($rowData['fine_data'], true);
+                    if (is_array($fineData)) {
+                        foreach ($fineData as $fine) {
+                            $finePemanen += $fine['pemanen'] ?? 0;
+                            $fineKerani += $fine['kerani'] ?? 0;
+                            $fineMandorPanen += $fine['mandorPanen'] ?? 0;
+                            $fineMandor1 += $fine['mandor1'] ?? 0;
+                            $fineAsisten += $fine['asisten'] ?? 0;
+                        }
+                    }
+                }
+                
                 $ancak->rows()->create([
                     'row_number' => $index + 1,
                     'harvester_name' => $rowData['harvester_name'] ?? null,
@@ -230,8 +286,15 @@ class AncakInspectionController extends Controller
                     'bunch_count' => $rowData['bunch_count'] ?? 0,
                     'bt_pkk' => $rowData['bt_pkk'] ?? 0,
                     'tph_number' => $rowData['tph_number'] ?? null,
-                    'apd_status' => $rowData['apd_status'],
-                    'fine_amount' => $rowData['fine_amount'] ?? 0,
+                    'tph_status' => $rowData['tph_status'] ?? 'bersih',
+                    'apd_status' => $rowData['apd_status'] ?? 'lengkap',
+                    'fine_amount' => $rowData['fine_pemanen'] ?? $rowData['fine_amount'] ?? 0,
+                    'fine_data' => $rowData['fine_data'] ?? null,
+                    'fine_pemanen' => $finePemanen,
+                    'fine_kerani_panen' => $fineKerani,
+                    'fine_mandor_panen' => $fineMandorPanen,
+                    'fine_mandor_1' => $fineMandor1,
+                    'fine_asisten' => $fineAsisten,
                 ]);
             }
 

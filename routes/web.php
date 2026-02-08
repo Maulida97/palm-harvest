@@ -6,8 +6,24 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('landing');
 });
+
+// Public Memo Routes (no authentication required)
+Route::prefix('memo')->name('public.memo.')->group(function () {
+    Route::get('/', [Admin\PublicMemoController::class, 'index'])->name('index');
+    Route::get('/{memo}', [Admin\PublicMemoController::class, 'show'])->name('show');
+});
+
+// Public Rekap Routes (no authentication required)
+Route::prefix('rekap')->name('public.rekap.')->group(function () {
+    Route::get('/bap', [Admin\PublicRekapController::class, 'bap'])->name('bap');
+    Route::get('/ancak', [Admin\PublicRekapController::class, 'ancak'])->name('ancak');
+    Route::get('/ancak/{ancak}', [Admin\PublicRekapController::class, 'showAncak'])->name('ancak.show');
+    Route::get('/bap-material', [Admin\PublicRekapController::class, 'bapMaterial'])->name('bap-material');
+    Route::get('/bap-material/{bapMaterial}', [Admin\PublicRekapController::class, 'showBapMaterial'])->name('bap-material.show');
+});
+
 
 // Redirect authenticated users to their dashboard based on role
 Route::get('/dashboard', function () {
@@ -54,6 +70,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Kebersihan Ancak Panen & TPH
     Route::resource('ancak', Admin\AncakInspectionController::class);
+    
+    // BAP Material
+    Route::resource('bap-material', Admin\BapMaterialController::class);
     
     // Internal Memo routes
     Route::prefix('memo')->name('memo.')->group(function () {

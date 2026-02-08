@@ -18,8 +18,16 @@ class AncakInspectionRow extends Model
         'bunch_count',
         'bt_pkk',
         'tph_number',
+        'tph_status',
         'apd_status',
         'fine_amount',
+        'fine_category_id',
+        'fine_count',
+        'fine_pemanen',
+        'fine_kerani_panen',
+        'fine_mandor_panen',
+        'fine_mandor_1',
+        'fine_asisten',
     ];
 
     public function inspection(): BelongsTo

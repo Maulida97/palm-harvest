@@ -54,7 +54,12 @@
             <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.ancak') ? 'font-semibold' : 'font-medium' }} leading-normal">Kebersihan Ancak</p>
         </a>
         
-        <!-- Internal Memo with Submenu -->
+        <a href="{{ route('admin.bap-material.index') }}" 
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.bap-material') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
+            <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.bap-material') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">construction</span>
+            <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.bap-material') ? 'font-semibold' : 'font-medium' }} leading-normal">BAP Material</p>
+        </a>
+        
         <div x-data="{ open: {{ str_starts_with($currentRoute, 'admin.memo') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.memo') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">

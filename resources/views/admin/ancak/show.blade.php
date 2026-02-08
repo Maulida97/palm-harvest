@@ -26,19 +26,8 @@
 
     <!-- Info Card -->
     <div class="bg-white p-6 rounded-xl border border-surface-border shadow-sm mb-6">
-        <div class="flex justify-between items-start mb-4">
+        <div class="mb-4">
             <h3 class="text-lg font-semibold text-text-main">Informasi Inspeksi</h3>
-            @if($ancak->isCompleted())
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[#e1f5d6] text-[#0c4e16]">
-                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    Selesai
-                </span>
-            @else
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700">
-                    <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
-                    Pending
-                </span>
-            @endif
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -85,52 +74,132 @@
         </div>
     </div>
 
+    <!-- Ringkasan Denda per Role -->
+    <div class="bg-white p-6 rounded-xl border border-surface-border shadow-sm mb-6">
+        <h3 class="text-lg font-semibold text-text-main mb-4">Ringkasan Denda per Role</h3>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                <p class="text-xs text-red-600 uppercase font-medium mb-1">Denda Pemanen</p>
+                <p class="text-lg font-bold text-red-700">Rp {{ number_format($ancak->rows->sum('fine_pemanen')) }}</p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                <p class="text-xs text-yellow-600 uppercase font-medium mb-1">Denda Kerani Panen</p>
+                <p class="text-lg font-bold text-yellow-700">Rp {{ number_format($ancak->rows->sum('fine_kerani_panen')) }}</p>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <p class="text-xs text-blue-600 uppercase font-medium mb-1">Denda Mandor Panen</p>
+                <p class="text-lg font-bold text-blue-700">Rp {{ number_format($ancak->rows->sum('fine_mandor_panen')) }}</p>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                <p class="text-xs text-purple-600 uppercase font-medium mb-1">Denda Mandor 1</p>
+                <p class="text-lg font-bold text-purple-700">Rp {{ number_format($ancak->rows->sum('fine_mandor_1')) }}</p>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p class="text-xs text-green-600 uppercase font-medium mb-1">Denda Asisten</p>
+                <p class="text-lg font-bold text-green-700">Rp {{ number_format($ancak->rows->sum('fine_asisten')) }}</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Inspection Rows Table -->
     <div class="bg-white p-6 rounded-xl border border-surface-border shadow-sm mb-6">
         <h3 class="text-lg font-semibold text-text-main mb-4">Detail Inspeksi Pemanen</h3>
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm min-w-[800px]">
+            <table class="w-full text-left text-sm min-w-[1200px]">
                 <thead class="bg-[#edf3e7] border-b border-surface-border">
                     <tr>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">No</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Pemanen</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Ancak</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">TT (Tandan)</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">BT (PKK)</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">TPH</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">APD</th>
-                        <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs text-right">Denda (Rp)</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">No</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">Pemanen</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">Ancak</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">TT</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">BT</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">TPH</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">APD</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs">Jenis Denda</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs text-right">Pemanen</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs text-right">Kerani</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs text-right">Mandor P</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs text-right">Mandor 1</th>
+                        <th class="px-3 py-3 font-semibold text-text-secondary uppercase text-xs text-right">Asisten</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-surface-border">
                     @forelse($ancak->rows as $row)
                         <tr>
-                            <td class="px-4 py-3 text-text-main">{{ $row->row_number }}</td>
-                            <td class="px-4 py-3 text-text-main font-medium">{{ $row->harvester_name ?? '-' }}</td>
-                            <td class="px-4 py-3 text-text-main">{{ $row->ancak_location ?? '-' }}</td>
-                            <td class="px-4 py-3 text-text-main">{{ $row->bunch_count }}</td>
-                            <td class="px-4 py-3 text-text-main">{{ $row->bt_pkk }}</td>
-                            <td class="px-4 py-3 text-text-main">{{ $row->tph_number ?? '-' }}</td>
-                            <td class="px-4 py-3">
-                                @if($row->apd_status === 'lengkap')
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">Lengkap</span>
+                            <td class="px-3 py-3 text-text-main">{{ $row->row_number }}</td>
+                            <td class="px-3 py-3 text-text-main font-medium">{{ $row->harvester_name ?? '-' }}</td>
+                            <td class="px-3 py-3 text-text-main">{{ $row->ancak_location ?? '-' }}</td>
+                            <td class="px-3 py-3 text-text-main">{{ $row->bunch_count }}</td>
+                            <td class="px-3 py-3 text-text-main">{{ $row->bt_pkk }}</td>
+                            <td class="px-3 py-3">
+                                @if(($row->tph_status ?? 'bersih') === 'bersih')
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">Bersih</span>
                                 @else
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Tidak Lengkap</span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Kotor</span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-text-main text-right">{{ number_format($row->fine_amount) }}</td>
+                            <td class="px-3 py-3">
+                                @if($row->apd_status === 'lengkap')
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">Lengkap</span>
+                                @elseif($row->apd_status === 'boot')
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-700">Boot</span>
+                                @elseif($row->apd_status === 'helm')
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">Helm</span>
+                                @endif
+                            </td>
+                            <td class="px-3 py-3 text-text-main text-xs">
+                                @if($row->fine_data)
+                                    @php
+                                        $fineData = is_string($row->fine_data) ? json_decode($row->fine_data, true) : $row->fine_data;
+                                    @endphp
+                                    @if(!empty($fineData))
+                                        <div class="space-y-1">
+                                            @foreach($fineData as $fine)
+                                                <div class="px-2 py-1 rounded bg-red-50 text-red-700">
+                                                    {{ $fine['code'] ?? '' }}. {{ $fine['desc'] ?? '' }} ({{ $fine['count'] ?? 1 }}x)
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="text-green-600">Tidak Ada</span>
+                                    @endif
+                                @elseif($row->fine_pemanen > 0)
+                                    <span class="px-2 py-1 rounded bg-red-50 text-red-700">Ada Denda</span>
+                                @else
+                                    <span class="text-green-600">Tidak Ada</span>
+                                @endif
+                            </td>
+                            <td class="px-3 py-3 text-right {{ $row->fine_pemanen > 0 ? 'text-red-600 font-medium' : 'text-text-main' }}">
+                                {{ number_format($row->fine_pemanen ?? 0) }}
+                            </td>
+                            <td class="px-3 py-3 text-right {{ $row->fine_kerani_panen > 0 ? 'text-yellow-600 font-medium' : 'text-text-main' }}">
+                                {{ number_format($row->fine_kerani_panen ?? 0) }}
+                            </td>
+                            <td class="px-3 py-3 text-right {{ $row->fine_mandor_panen > 0 ? 'text-blue-600 font-medium' : 'text-text-main' }}">
+                                {{ number_format($row->fine_mandor_panen ?? 0) }}
+                            </td>
+                            <td class="px-3 py-3 text-right {{ $row->fine_mandor_1 > 0 ? 'text-purple-600 font-medium' : 'text-text-main' }}">
+                                {{ number_format($row->fine_mandor_1 ?? 0) }}
+                            </td>
+                            <td class="px-3 py-3 text-right {{ $row->fine_asisten > 0 ? 'text-green-600 font-medium' : 'text-text-main' }}">
+                                {{ number_format($row->fine_asisten ?? 0) }}
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-4 py-8 text-center text-text-secondary">Tidak ada data.</td>
+                            <td colspan="13" class="px-4 py-8 text-center text-text-secondary">Tidak ada data.</td>
                         </tr>
                     @endforelse
                 </tbody>
                 @if($ancak->rows->count() > 0)
                 <tfoot class="bg-[#edf3e7]">
                     <tr>
-                        <td colspan="7" class="px-4 py-3 font-semibold text-text-main text-right">Total Denda:</td>
-                        <td class="px-4 py-3 font-semibold text-text-main text-right">Rp {{ number_format($ancak->rows->sum('fine_amount')) }}</td>
+                        <td colspan="8" class="px-3 py-3 font-semibold text-text-main text-right">Total Denda:</td>
+                        <td class="px-3 py-3 font-semibold text-red-700 text-right">Rp {{ number_format($ancak->rows->sum('fine_pemanen')) }}</td>
+                        <td class="px-3 py-3 font-semibold text-yellow-700 text-right">Rp {{ number_format($ancak->rows->sum('fine_kerani_panen')) }}</td>
+                        <td class="px-3 py-3 font-semibold text-blue-700 text-right">Rp {{ number_format($ancak->rows->sum('fine_mandor_panen')) }}</td>
+                        <td class="px-3 py-3 font-semibold text-purple-700 text-right">Rp {{ number_format($ancak->rows->sum('fine_mandor_1')) }}</td>
+                        <td class="px-3 py-3 font-semibold text-green-700 text-right">Rp {{ number_format($ancak->rows->sum('fine_asisten')) }}</td>
                     </tr>
                 </tfoot>
                 @endif
