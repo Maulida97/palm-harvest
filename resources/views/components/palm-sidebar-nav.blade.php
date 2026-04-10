@@ -24,29 +24,27 @@
             <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.holdqc') ? 'font-semibold' : 'font-medium' }} leading-normal">Hold QC</p>
         </a>
         
-        <a href="{{ route('admin.blocks.index') }}" 
-           class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.blocks') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
-            <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.blocks') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">map</span>
-            <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.blocks') ? 'font-semibold' : 'font-medium' }} leading-normal">Blok</p>
-        </a>
-        
         <a href="{{ route('admin.officers.index') }}" 
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.officers') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
             <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.officers') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">group</span>
-            <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.officers') ? 'font-semibold' : 'font-medium' }} leading-normal">Petugas</p>
+            <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.officers') ? 'font-semibold' : 'font-medium' }} leading-normal">Anggota QC</p>
         </a>
         
+        {{-- Menu Panen (dinonaktifkan)
         <a href="{{ route('admin.harvests.index') }}" 
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.harvests') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
             <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.harvests') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">inventory_2</span>
             <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.harvests') ? 'font-semibold' : 'font-medium' }} leading-normal">Panen</p>
         </a>
+        --}}
         
+        {{-- Menu Laporan (dinonaktifkan)
         <a href="{{ route('admin.reports.index') }}" 
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.reports') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
             <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.reports') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">description</span>
             <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.reports') ? 'font-semibold' : 'font-medium' }} leading-normal">Laporan</p>
         </a>
+        --}}
         
         <a href="{{ route('admin.ancak.index') }}" 
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.ancak') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
@@ -54,11 +52,49 @@
             <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.ancak') ? 'font-semibold' : 'font-medium' }} leading-normal">Kebersihan Ancak</p>
         </a>
         
+        <a href="{{ route('admin.fertilizer-spotchecks.index') }}" 
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.fertilizer-spotchecks') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
+            <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.fertilizer-spotchecks') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">eco</span>
+            <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.fertilizer-spotchecks') ? 'font-semibold' : 'font-medium' }} leading-normal">Spotchek Pemupukan</p>
+        </a>
+        
         <a href="{{ route('admin.bap-material.index') }}" 
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.bap-material') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
             <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.bap-material') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">construction</span>
             <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.bap-material') ? 'font-semibold' : 'font-medium' }} leading-normal">BAP Material</p>
         </a>
+        
+        <div x-data="{ open: {{ str_starts_with($currentRoute, 'admin.blocks') || str_starts_with($currentRoute, 'admin.fertilizers') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.blocks') || str_starts_with($currentRoute, 'admin.fertilizers') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.blocks') || str_starts_with($currentRoute, 'admin.fertilizers') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">database</span>
+                    <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.blocks') || str_starts_with($currentRoute, 'admin.fertilizers') ? 'font-semibold' : 'font-medium' }} leading-normal">Master Data</p>
+                </div>
+                <span class="material-symbols-outlined text-[18px] text-text-secondary transition-transform duration-200" :class="open ? 'rotate-180' : ''">expand_more</span>
+            </button>
+            
+            <!-- Submenu -->
+            <div x-show="open" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-2"
+                 class="ml-9 mt-1 flex flex-col gap-1">
+                <a href="{{ route('admin.blocks.index') }}" 
+                   class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm {{ str_starts_with($currentRoute, 'admin.blocks') ? 'bg-[#edf3e7] font-semibold text-text-main' : 'text-text-secondary hover:bg-white hover:text-text-main hover:shadow-sm' }} transition-all">
+                    <span class="w-1.5 h-1.5 rounded-full {{ str_starts_with($currentRoute, 'admin.blocks') ? 'bg-primary' : 'bg-text-secondary/40' }}"></span>
+                    Blok
+                </a>
+                <a href="{{ route('admin.fertilizers.index') }}" 
+                   class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm {{ str_starts_with($currentRoute, 'admin.fertilizers') ? 'bg-[#edf3e7] font-semibold text-text-main' : 'text-text-secondary hover:bg-white hover:text-text-main hover:shadow-sm' }} transition-all">
+                    <span class="w-1.5 h-1.5 rounded-full {{ str_starts_with($currentRoute, 'admin.fertilizers') ? 'bg-primary' : 'bg-text-secondary/40' }}"></span>
+                    Pupuk
+                </a>
+            </div>
+        </div>
         
         <div x-data="{ open: {{ str_starts_with($currentRoute, 'admin.memo') ? 'true' : 'false' }} }">
             <button @click="open = !open" 

@@ -71,7 +71,6 @@ class BapController extends Controller
     {
         $validated = $request->validate([
             'block_id' => 'required|exists:blocks,id',
-            'weight_kg' => 'required|numeric|min:0.01|max:99999.99',
             'harvest_date' => 'nullable|date',
             'notes' => 'nullable|string|max:500',
             'status' => 'nullable|in:verified,pending',
@@ -91,7 +90,7 @@ class BapController extends Controller
         Harvest::create([
             'block_id' => $validated['block_id'],
             'officer_id' => auth()->id(),
-            'weight_kg' => $validated['weight_kg'],
+            'weight_kg' => 0,
             'harvest_date' => $validated['harvest_date'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'verification_status' => $status,
@@ -140,7 +139,6 @@ class BapController extends Controller
     {
         $validated = $request->validate([
             'block_id' => 'required|exists:blocks,id',
-            'weight_kg' => 'required|numeric|min:0.01|max:99999.99',
             'harvest_date' => 'nullable|date',
             'notes' => 'nullable|string|max:500',
             'status' => 'nullable|in:verified,pending',
@@ -163,7 +161,6 @@ class BapController extends Controller
 
         $bap->update([
             'block_id' => $validated['block_id'],
-            'weight_kg' => $validated['weight_kg'],
             'harvest_date' => $validated['harvest_date'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'verification_status' => $status,

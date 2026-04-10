@@ -93,28 +93,18 @@
                             </div>
                         </div>
                         
-                        <!-- Row 4: Status & Total -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-text-main mb-1">Status</label>
-                                <div class="flex gap-2">
-                                    <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-surface-border bg-[#edf3e7] cursor-pointer">
-                                        <input type="radio" name="status_display" value="verified" {{ $bap->verification_status === 'verified' ? 'checked' : '' }} class="text-primary focus:ring-primary" onchange="document.getElementById('status').value='verified'">
-                                        <span class="text-sm">OK</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-surface-border bg-[#edf3e7] cursor-pointer">
-                                        <input type="radio" name="status_display" value="pending" {{ $bap->verification_status === 'pending' ? 'checked' : '' }} class="text-primary focus:ring-primary" onchange="document.getElementById('status').value='pending'">
-                                        <span class="text-sm">Hold</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="weight_kg" class="block text-sm font-medium text-text-main mb-1">Total (Kg) *</label>
-                                <input type="number" name="weight_kg" id="weight_kg" step="0.01" min="0.01" required
-                                       value="{{ old('weight_kg', $bap->weight_kg) }}"
-                                       placeholder="0.00"
-                                       class="w-full h-10 px-3 rounded-lg border border-surface-border focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm bg-[#edf3e7] @error('weight_kg') border-red-500 @enderror">
-                                @error('weight_kg')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        <!-- Row 4: Status -->
+                        <div>
+                            <label class="block text-sm font-medium text-text-main mb-1">Status</label>
+                            <div class="flex gap-2">
+                                <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-surface-border bg-[#edf3e7] cursor-pointer">
+                                    <input type="radio" name="status_display" value="verified" {{ $bap->verification_status === 'verified' ? 'checked' : '' }} class="text-primary focus:ring-primary" onchange="document.getElementById('status').value='verified'">
+                                    <span class="text-sm">OK</span>
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-surface-border bg-[#edf3e7] cursor-pointer">
+                                    <input type="radio" name="status_display" value="pending" {{ $bap->verification_status === 'pending' ? 'checked' : '' }} class="text-primary focus:ring-primary" onchange="document.getElementById('status').value='pending'">
+                                    <span class="text-sm">Hold</span>
+                                </label>
                             </div>
                         </div>
                         

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules;
 
 class OfficerController extends Controller
@@ -16,8 +17,6 @@ class OfficerController extends Controller
     public function index()
     {
         $officers = User::where('role', 'officer')
-            ->withCount('harvests')
-            ->withSum('harvests', 'weight_kg')
             ->latest()
             ->paginate(10);
 
@@ -39,21 +38,29 @@ class OfficerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'nullable|string|max:20',
+            'username' => 'required|string|max:255|unique:users,username|alpha_dash',
+            'jabatan' => 'nullable|string|max:255',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        User::create([
+        $data = [
             'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'] ?? null,
+            'username' => $validated['username'],
+            'jabatan' => $validated['jabatan'] ?? null,
+            'email' => $validated['username'] . '@palmharvest.local',
             'password' => Hash::make($validated['password']),
             'role' => 'officer',
-        ]);
+        ];
+
+        if ($request->hasFile('profile_photo')) {
+            $data['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+        }
+
+        User::create($data);
 
         return redirect()->route('admin.officers.index')
-            ->with('success', 'Petugas berhasil ditambahkan.');
+            ->with('success', 'Anggota QC berhasil ditambahkan.');
     }
 
     /**
@@ -61,10 +68,6 @@ class OfficerController extends Controller
      */
     public function show(User $officer)
     {
-        $officer->load(['harvests' => function ($query) {
-            $query->with('block')->latest('harvest_date')->take(10);
-        }]);
-
         return view('admin.officers.show', compact('officer'));
     }
 
@@ -83,23 +86,38 @@ class OfficerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $officer->id,
-            'phone' => 'nullable|string|max:20',
+            'username' => 'required|string|max:255|alpha_dash|unique:users,username,' . $officer->id,
+            'jabatan' => 'nullable|string|max:255',
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $officer->name = $validated['name'];
-        $officer->email = $validated['email'];
-        $officer->phone = $validated['phone'] ?? null;
+        $officer->username = $validated['username'];
+        $officer->jabatan = $validated['jabatan'] ?? null;
 
         if (!empty($validated['password'])) {
             $officer->password = Hash::make($validated['password']);
         }
 
+        if ($request->hasFile('profile_photo')) {
+            if ($officer->profile_photo) {
+                Storage::disk('public')->delete($officer->profile_photo);
+            }
+            $officer->profile_photo = $request->file('profile_photo')->store('profile-photos', 'public');
+        }
+
+        if ($request->has('remove_photo') && $request->remove_photo == '1') {
+            if ($officer->profile_photo) {
+                Storage::disk('public')->delete($officer->profile_photo);
+            }
+            $officer->profile_photo = null;
+        }
+
         $officer->save();
 
         return redirect()->route('admin.officers.index')
-            ->with('success', 'Data petugas berhasil diperbarui.');
+            ->with('success', 'Data anggota QC berhasil diperbarui.');
     }
 
     /**
@@ -107,9 +125,13 @@ class OfficerController extends Controller
      */
     public function destroy(User $officer)
     {
+        if ($officer->profile_photo) {
+            Storage::disk('public')->delete($officer->profile_photo);
+        }
+
         $officer->delete();
 
         return redirect()->route('admin.officers.index')
-            ->with('success', 'Petugas berhasil dihapus.');
+            ->with('success', 'Anggota QC berhasil dihapus.');
     }
 }

@@ -135,7 +135,7 @@
             </div>
             <div class="flex flex-col min-w-0 flex-1">
                 <p class="text-text-main text-xs font-semibold truncate">{{ auth()->user()->name }}</p>
-                <p class="text-text-secondary text-[10px] truncate">{{ auth()->user()->email }}</p>
+                <p class="text-text-secondary text-[10px] truncate">{{ auth()->user()->username ?? auth()->user()->email }}</p>
             </div>
             <span class="material-symbols-outlined text-text-secondary text-[16px] group-hover:text-primary">settings</span>
         </a>
@@ -178,14 +178,14 @@
             <div class="max-w-[1400px] mx-auto flex flex-col gap-4 lg:gap-6 pb-12">
                 <!-- Flash Messages -->
                 @if(session('success'))
-                    <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
+                    <div id="flash-success" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2 text-sm transition-opacity duration-500">
                         <span class="material-symbols-outlined text-green-600 text-[20px]">check_circle</span>
                         {{ session('success') }}
                     </div>
                 @endif
                 
                 @if(session('error'))
-                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
+                    <div id="flash-error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2 text-sm transition-opacity duration-500">
                         <span class="material-symbols-outlined text-red-600 text-[20px]">error</span>
                         {{ session('error') }}
                     </div>
@@ -221,6 +221,19 @@
             } else {
                 document.getElementById('mobile-sidebar').classList.add('sidebar-closed');
             }
+        });
+
+        // Auto-dismiss flash messages after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            ['flash-success', 'flash-error'].forEach(function(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    setTimeout(function() {
+                        el.style.opacity = '0';
+                        setTimeout(function() { el.remove(); }, 500);
+                    }, 3000);
+                }
+            });
         });
     </script>
     

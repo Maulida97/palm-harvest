@@ -70,14 +70,14 @@
             <form method="POST" action="{{ route('login') }}" class="space-y-4">
                 @csrf
                 
-                <!-- Email -->
+                <!-- Username -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-text-main mb-1">Email</label>
+                    <label for="username" class="block text-sm font-medium text-text-main mb-1">Username</label>
                     <div class="relative">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">mail</span>
-                        <input type="email" name="email" id="email" required autofocus
-                               value="{{ old('email') }}"
-                               placeholder="email@example.com"
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">person</span>
+                        <input type="text" name="username" id="username" required autofocus
+                               value="{{ old('username') }}"
+                               placeholder="Masukkan username"
                                class="w-full h-11 pl-10 pr-4 rounded-lg border border-surface-border focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm">
                     </div>
                 </div>

@@ -14,30 +14,34 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create Admin
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@palmharvest.co',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'phone' => '081234567890',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@palmharvest.co'],
+            [
+                'name' => 'Admin User',
+                'username' => 'admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'phone' => '081234567890',
+            ]
+        );
 
         // Create Officers
         $officers = [
-            ['name' => 'Budi Santoso', 'email' => 'budi@palmharvest.co', 'phone' => '081234567891'],
-            ['name' => 'Siti Aminah', 'email' => 'siti@palmharvest.co', 'phone' => '081234567892'],
-            ['name' => 'Joko Widodo', 'email' => 'joko@palmharvest.co', 'phone' => '081234567893'],
-            ['name' => 'Dewi Lestari', 'email' => 'dewi@palmharvest.co', 'phone' => '081234567894'],
+            ['name' => 'Siti Aminah', 'username' => 'siti', 'email' => 'siti@palmharvest.co'],
+            ['name' => 'Joko Widodo', 'username' => 'joko', 'email' => 'joko@palmharvest.co'],
+            ['name' => 'Dewi Lestari', 'username' => 'dewi', 'email' => 'dewi@palmharvest.co'],
         ];
 
         foreach ($officers as $officer) {
-            User::create([
-                'name' => $officer['name'],
-                'email' => $officer['email'],
-                'password' => Hash::make('password'),
-                'role' => 'officer',
-                'phone' => $officer['phone'],
-            ]);
+            User::updateOrCreate(
+                ['email' => $officer['email']],
+                [
+                    'name' => $officer['name'],
+                    'username' => $officer['username'],
+                    'password' => Hash::make('password'),
+                    'role' => 'officer',
+                ]
+            );
         }
     }
 }

@@ -50,6 +50,14 @@
                     <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.officers') ? 'font-semibold' : 'font-medium' }} leading-normal">Petugas</p>
                 </a>
                 
+                {{-- Menu Pupuk (dinonaktifkan - menggunakan palm-sidebar-nav.blade.php)
+                <a href="{{ route('admin.fertilizers.index') }}" 
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.fertilizers') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
+                    <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.fertilizers') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">compost</span>
+                    <p class="text-text-main text-sm {{ str_starts_with($currentRoute, 'admin.fertilizers') ? 'font-semibold' : 'font-medium' }} leading-normal">Pupuk</p>
+                </a>
+                --}}
+                
                 <a href="{{ route('admin.harvests.index') }}" 
                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ str_starts_with($currentRoute, 'admin.harvests') ? 'bg-[#edf3e7]' : 'hover:bg-white hover:shadow-sm' }} transition-all group">
                     <span class="material-symbols-outlined {{ str_starts_with($currentRoute, 'admin.harvests') ? 'filled text-primary' : 'text-[#739a4c] group-hover:text-primary' }}">inventory_2</span>

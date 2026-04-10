@@ -76,6 +76,11 @@
                                    class="p-1.5 text-text-secondary hover:text-primary transition-colors" title="Preview">
                                     <span class="material-symbols-outlined text-[20px]">visibility</span>
                                 </a>
+                                <!-- Edit Button -->
+                                <a href="{{ route('admin.memo.edit', [$type, $memo]) }}" 
+                                   class="p-1.5 text-text-secondary hover:text-blue-500 transition-colors" title="Edit">
+                                    <span class="material-symbols-outlined text-[20px]">edit</span>
+                                </a>
                                 <!-- Delete Button -->
                                 <form action="{{ route('admin.memo.destroy', [$type, $memo]) }}" method="POST" 
                                       onsubmit="return confirm('Yakin ingin menghapus memo ini?')" class="inline">

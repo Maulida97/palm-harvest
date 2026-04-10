@@ -89,19 +89,11 @@
                         </div>
                     </div>
                     
-                    <!-- Row 4: No. SPK & Total -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-text-main mb-1">No. SPK</label>
-                            <div class="w-full h-10 px-3 rounded-lg border border-surface-border bg-[#edf3e7] flex items-center text-sm">
-                                {{ $bap->no_spk ?? '-' }}
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-text-main mb-1">Total (Kg)</label>
-                            <div class="w-full h-10 px-3 rounded-lg border border-surface-border bg-[#e1f5d6] flex items-center text-sm font-bold text-primary">
-                                {{ number_format($bap->weight_kg, 2) }} Kg
-                            </div>
+                    <!-- Row 4: No. SPK -->
+                    <div>
+                        <label class="block text-sm font-medium text-text-main mb-1">No. SPK</label>
+                        <div class="w-full h-10 px-3 rounded-lg border border-surface-border bg-[#edf3e7] flex items-center text-sm">
+                            {{ $bap->no_spk ?? '-' }}
                         </div>
                     </div>
                 </div>

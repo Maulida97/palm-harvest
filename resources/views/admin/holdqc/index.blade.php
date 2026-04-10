@@ -55,7 +55,7 @@
                     <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Block</th>
                     <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Luas</th>
                     <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">No. SPK</th>
-                    <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Total</th>
+
                     <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Tanggal Terakhir</th>
                     <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Status</th>
                     <th class="px-4 py-3 font-semibold text-text-secondary uppercase text-xs">Aksi</th>
@@ -73,7 +73,7 @@
                         </td>
                         <td class="px-4 py-3 text-text-main">{{ $harvest->block->area_hectares ?? '-' }} Ha</td>
                         <td class="px-4 py-3 text-text-secondary">{{ $harvest->no_spk ?? '-' }}</td>
-                        <td class="px-4 py-3 text-text-main font-semibold">{{ number_format($harvest->weight_kg) }} Kg</td>
+
                         <td class="px-4 py-3 text-text-main">{{ $harvest->harvest_date->format('d/m/Y') }}</td>
                         <td class="px-4 py-3">
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700">
@@ -124,7 +124,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="px-4 py-8 text-center text-text-secondary">Tidak ada data yang ditahan.</td>
+                        <td colspan="8" class="px-4 py-8 text-center text-text-secondary">Tidak ada data yang ditahan.</td>
                     </tr>
                 @endforelse
             </tbody>

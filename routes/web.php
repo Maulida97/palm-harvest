@@ -74,12 +74,20 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // BAP Material
     Route::resource('bap-material', Admin\BapMaterialController::class);
     
+    // Master Data Pupuk
+    Route::resource('fertilizers', Admin\FertilizerController::class)->except(['show']);
+    
+    // Spotchek Pemupukan
+    Route::resource('fertilizer-spotchecks', Admin\FertilizerSpotcheckController::class);
+    
     // Internal Memo routes
     Route::prefix('memo')->name('memo.')->group(function () {
         Route::get('{type}', [Admin\InternalMemoController::class, 'index'])->name('index')->where('type', 'agronomi|pabrik');
         Route::get('{type}/create', [Admin\InternalMemoController::class, 'create'])->name('create')->where('type', 'agronomi|pabrik');
         Route::post('{type}', [Admin\InternalMemoController::class, 'store'])->name('store')->where('type', 'agronomi|pabrik');
         Route::get('{type}/{memo}', [Admin\InternalMemoController::class, 'show'])->name('show')->where('type', 'agronomi|pabrik');
+        Route::get('{type}/{memo}/edit', [Admin\InternalMemoController::class, 'edit'])->name('edit')->where('type', 'agronomi|pabrik');
+        Route::put('{type}/{memo}', [Admin\InternalMemoController::class, 'update'])->name('update')->where('type', 'agronomi|pabrik');
         Route::delete('{type}/{memo}', [Admin\InternalMemoController::class, 'destroy'])->name('destroy')->where('type', 'agronomi|pabrik');
     });
 });

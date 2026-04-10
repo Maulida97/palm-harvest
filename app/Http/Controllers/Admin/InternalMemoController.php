@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InternalMemo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class InternalMemoController extends Controller
 {
@@ -85,18 +86,70 @@ class InternalMemoController extends Controller
     }
 
     /**
+     * Show the form for editing the specified memo.
+     */
+    public function edit(string $type, InternalMemo $memo)
+    {
+        $this->validateType($type);
+
+        if ($memo->type !== $type) {
+            abort(404);
+        }
+
+        return view('admin.memo.edit', compact('memo', 'type'));
+    }
+
+    /**
+     * Update the specified memo in storage.
+     */
+    public function update(Request $request, string $type, InternalMemo $memo)
+    {
+        $this->validateType($type);
+
+        if ($memo->type !== $type) {
+            abort(404);
+        }
+
+        $validated = $request->validate([
+            'no_item' => 'required|string|max:255',
+            'berlaku' => 'required|date',
+            'tidak_berlaku' => 'nullable|date|after_or_equal:berlaku',
+            'tanggal_revisi' => 'nullable|date',
+            'file' => 'nullable|file|mimes:pdf|max:5120',
+        ]);
+
+        $memo->no_item = $validated['no_item'];
+        $memo->berlaku = $validated['berlaku'];
+        $memo->tidak_berlaku = $validated['tidak_berlaku'] ?? null;
+        $memo->tanggal_revisi = $validated['tanggal_revisi'] ?? null;
+
+        if ($request->hasFile('file')) {
+            // Delete old file
+            if ($memo->file_path) {
+                Storage::disk('public')->delete($memo->file_path);
+            }
+            $memo->file_path = $request->file('file')->store('memos', 'public');
+        }
+
+        $memo->save();
+
+        $typeName = $type === 'agronomi' ? 'Agronomi' : 'Pabrik';
+        return redirect()
+            ->route('admin.memo.index', $type)
+            ->with('success', "Internal Memo {$typeName} berhasil diperbarui.");
+    }
+
+    /**
      * Remove the specified memo from storage.
      */
     public function destroy(string $type, InternalMemo $memo)
     {
         $this->validateType($type);
         
-        // Ensure memo matches the type
         if ($memo->type !== $type) {
             abort(404);
         }
 
-        // Delete file if exists
         if ($memo->file_path) {
             Storage::disk('public')->delete($memo->file_path);
         }
